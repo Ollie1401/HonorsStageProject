@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { loginUser } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+    const { login } = useAuth();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -17,8 +20,7 @@ export default function Login() {
         try {
             const data = await loginUser(email, password);
 
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
+            login(data.token, data.user);
 
             setMessage(`Logged in as ${data.user.email}`);
             setEmail("");
