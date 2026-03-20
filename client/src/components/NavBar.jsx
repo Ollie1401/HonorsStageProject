@@ -12,13 +12,27 @@ export default function NavBar() {
     const { user, isAuthenticated, logout } = useAuth();
 
     return (
-        <nav style={{ display: "flex", gap: 10, padding: 12, borderBottom: "1px solid #ddd", alignItems: "center", flexWrap: "wrap" }}>
+        <nav
+            style={{
+                display: "flex",
+                gap: 10,
+                padding: 12,
+                borderBottom: "1px solid #ddd",
+                alignItems: "center",
+                flexWrap: "wrap",
+            }}
+        >
             <NavLink to="/" style={linkStyle}>Home</NavLink>
-            <NavLink to="/planner" style={linkStyle}>Planner</NavLink>
-            <NavLink to="/goals" style={linkStyle}>Goals</NavLink>
-            <NavLink to="/log" style={linkStyle}>Log</NavLink>
-            <NavLink to="/profile" style={linkStyle}>Profile</NavLink>
-            <NavLink to="/settings" style={linkStyle}>Settings</NavLink>
+
+            {isAuthenticated && (
+                <>
+                    <NavLink to="/planner" style={linkStyle}>Planner</NavLink>
+                    <NavLink to="/goals" style={linkStyle}>Goals</NavLink>
+                    <NavLink to="/log" style={linkStyle}>Log</NavLink>
+                    <NavLink to="/profile" style={linkStyle}>Profile</NavLink>
+                    <NavLink to="/settings" style={linkStyle}>Settings</NavLink>
+                </>
+            )}
 
             {!isAuthenticated ? (
                 <>
