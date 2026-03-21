@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { pool } from "./db.js";
 import authRoutes from "./routes/auth.js";
 import plannerRoutes from "./routes/planner.js";
+import goalsRoutes from "./routes/goals.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/planner", plannerRoutes);
+app.use("/goals", goalsRoutes);
 
 app.get("/health", (req, res) => {
     res.json({ ok: true, app: "DailyThrive", message: "API is running" });
