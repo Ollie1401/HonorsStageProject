@@ -7,10 +7,10 @@ const router = express.Router();
 router.get("/", authenticateToken, async (req, res) => {
     try {
         const result = await pool.query(
-            `SELECT id, title, description, target_date, points, is_completed, completed_at, created_at
+            `SELECT id, title, description, deadline, points_reward, is_completed, created_at, completed_at
        FROM goals
        WHERE user_id = $1
-       ORDER BY is_completed ASC, target_date ASC NULLS LAST, created_at DESC`,
+       ORDER BY is_completed ASC, deadline ASC NULLS LAST, created_at DESC`,
             [req.user.userId]
         );
 
@@ -29,7 +29,7 @@ router.get("/", authenticateToken, async (req, res) => {
 
 router.post("/", authenticateToken, async (req, res) => {
     try {
-        const { title, description, targetDate, points } = req.body;
+        const { title, description, deadline } = req.body;
 
         if (!title) {
             return res.status(400).json({
@@ -39,15 +39,14 @@ router.post("/", authenticateToken, async (req, res) => {
         }
 
         const result = await pool.query(
-            `INSERT INTO goals (user_id, title, description, target_date, points)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, title, description, target_date, points, is_completed, completed_at, created_at`,
+            `INSERT INTO goals (user_id, title, description, deadline)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id, title, description, deadline, points_reward, is_completed, created_at, completed_at`,
             [
                 req.user.userId,
                 title,
                 description || null,
-                targetDate || null,
-                points || 10,
+                deadline || null,
             ]
         );
 
@@ -66,37 +65,75 @@ router.post("/", authenticateToken, async (req, res) => {
 });
 
 router.patch("/:id/complete", authenticateToken, async (req, res) => {
-    try {
-        const { id } = req.params;
+    const client = await pool.connect();
 
-        const result = await pool.query(
+    try {
+        await client.query("BEGIN");
+
+        const goalResult = await client.query(
+            `SELECT id, points_reward, is_completed
+       FROM goals
+       WHERE id = $1 AND user_id = $2`,
+            [req.params.id, req.user.userId]
+        );
+
+        if (goalResult.rows.length === 0) {
+            await client.query("ROLLBACK");
+            return res.status(404).json({
+                ok: false,
+                error: "Goal not found",
+            });
+        }
+
+        const goal = goalResult.rows[0];
+
+        if (goal.is_completed) {
+            await client.query("ROLLBACK");
+            return res.status(400).json({
+                ok: false,
+                error: "Goal is already completed",
+            });
+        }
+
+        const updatedGoal = await client.query(
             `UPDATE goals
        SET is_completed = TRUE,
            completed_at = NOW()
-       WHERE id = $1 AND user_id = $2 AND is_completed = FALSE
-       RETURNING id, title, points, is_completed, completed_at`,
-            [id, req.user.userId]
+       WHERE id = $1
+       RETURNING id, title, description, deadline, points_reward, is_completed, created_at, completed_at`,
+            [req.params.id]
         );
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({
-                ok: false,
-                error: "Goal not found or already completed",
-            });
-        }
+        await client.query(
+            `UPDATE users
+       SET points = points + 100
+       WHERE id = $1`,
+            [req.user.userId]
+        );
+
+        const userPoints = await client.query(
+            `SELECT points FROM users WHERE id = $1`,
+            [req.user.userId]
+        );
+
+        await client.query("COMMIT");
 
         return res.json({
             ok: true,
             message: "Goal completed successfully",
-            goal: result.rows[0],
-            pointsAwarded: result.rows[0].points,
+            goal: updatedGoal.rows[0],
+            totalPoints: userPoints.rows[0].points,
+            rewardUnlocked: userPoints.rows[0].points % 1000 === 0,
         });
     } catch (error) {
+        await client.query("ROLLBACK");
         console.error("Complete goal error:", error);
         return res.status(500).json({
             ok: false,
             error: "Server error while completing goal",
         });
+    } finally {
+        client.release();
     }
 });
 
