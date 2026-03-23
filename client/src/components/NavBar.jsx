@@ -31,6 +31,7 @@ export default function NavBar() {
                     <NavLink to="/log" style={linkStyle}>Log</NavLink>
                     <NavLink to="/profile" style={linkStyle}>Profile</NavLink>
                     <NavLink to="/settings" style={linkStyle}>Settings</NavLink>
+                    <NavLink to="/rewards" style={linkStyle}>Rewards</NavLink>
                 </>
             )}
 

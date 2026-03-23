@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Rewards from "./pages/Rewards";
 
 export default function App() {
     return (
@@ -58,6 +59,16 @@ export default function App() {
                             </ProtectedRoute>
                         }
                     />
+                    <Route
+                         path="/rewards"
+                         element={
+                             <ProtectedRoute>
+                                 <Rewards />
+                             </ProtectedRoute>
+                         }
+                    />
+
+
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                 </Routes>
