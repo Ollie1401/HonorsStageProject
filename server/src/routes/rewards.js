@@ -5,36 +5,48 @@ import { authenticateToken } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 const rewardMilestones = [
-    {
-        milestone: 1000,
-        name: "Sun Sticker Pack",
-        type: "stickers",
-        description: "Unlock a bright sticker pack for your profile.",
-    },
-    {
-        milestone: 2000,
-        name: "Lotus Avatar",
-        type: "avatar",
-        description: "Unlock a calm lotus profile avatar.",
-    },
-    {
-        milestone: 3000,
-        name: "Goal Crusher Badge",
-        type: "badge",
-        description: "Unlock a badge for smashing your goals.",
-    },
-    {
-        milestone: 4000,
-        name: "Star Theme Unlock",
-        type: "theme",
-        description: "Unlock a star-themed app style.",
-    },
-    {
-        milestone: 5000,
-        name: "Elite Athlete Avatar",
-        type: "avatar",
-        description: "Unlock an elite athlete profile avatar.",
-    },
+  {
+    milestone: 500,
+    name: "Getting Started",
+    type: "title",
+    description: "Unlock the 'Getting Started' profile title.",
+  },
+  {
+    milestone: 1000,
+    name: "Goal Crusher",
+    type: "title",
+    description: "Unlock the 'Goal Crusher' profile title.",
+  },
+  {
+    milestone: 1500,
+    name: "Wellness Warrior",
+    type: "title",
+    description: "Unlock the 'Wellness Warrior' profile title.",
+  },
+  {
+    milestone: 2000,
+    name: "Lotus Avatar",
+    type: "avatar",
+    description: "Unlock a calm lotus profile avatar.",
+  },
+  {
+    milestone: 2500,
+    name: "DailyThrive Star",
+    type: "title",
+    description: "Unlock the 'DailyThrive Star' profile title.",
+  },
+  {
+    milestone: 3000,
+    name: "Unstoppable",
+    type: "title",
+    description: "Unlock the 'Unstoppable' profile title.",
+  },
+  {
+    milestone: 5000,
+    name: "Elite Athlete Avatar",
+    type: "avatar",
+    description: "Unlock an elite athlete profile avatar.",
+  },
 ];
 
 router.get("/", authenticateToken, async (req, res) => {

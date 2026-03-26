@@ -106,15 +106,60 @@ router.patch("/:id/complete", authenticateToken, async (req, res) => {
 
         await client.query(
             `UPDATE users
-       SET points = points + 100
-       WHERE id = $1`,
+   SET points = points + 100
+   WHERE id = $1`,
             [req.user.userId]
         );
 
         const userPoints = await client.query(
-            `SELECT points FROM users WHERE id = $1`,
+            `SELECT points, unlocked_avatars, unlocked_titles FROM users WHERE id = $1`,
             [req.user.userId]
         );
+
+        const totalPoints = userPoints.rows[0].points;
+        const unlockedAvatars = userPoints.rows[0].unlocked_avatars || ["default-avatar"];
+        const unlockedTitles = userPoints.rows[0].unlocked_titles || ["New Member"];
+
+        let newAvatar = null;
+        let newTitle = null;
+
+        
+if (totalPoints >= 500 && !unlockedTitles.includes("Getting Started")) {
+  newTitle = "Getting Started";
+}
+if (totalPoints >= 1000 && !unlockedTitles.includes("Goal Crusher")) {
+  newTitle = "Goal Crusher";
+}
+if (totalPoints >= 1500 && !unlockedTitles.includes("Wellness Warrior")) {
+  newTitle = "Wellness Warrior";
+}
+if (totalPoints >= 2000 && !unlockedAvatars.includes("lotus-avatar")) {
+  newAvatar = "lotus-avatar";
+}
+if (totalPoints >= 2500 && !unlockedTitles.includes("DailyThrive Star")) {
+  newTitle = "DailyThrive Star";
+}
+if (totalPoints >= 3000 && !unlockedTitles.includes("Unstoppable")) {
+  newTitle = "Unstoppable";
+}
+if (totalPoints >= 5000 && !unlockedAvatars.includes("elite-athlete-avatar")) {
+  newAvatar = "elite-athlete-avatar";
+}
+        if (newAvatar) {
+            await client.query(
+                `UPDATE users SET unlocked_avatars = array_append(unlocked_avatars, $1)
+     WHERE id = $2`,
+                [newAvatar, req.user.userId]
+            );
+        }
+
+        if (newTitle) {
+            await client.query(
+                `UPDATE users SET unlocked_titles = array_append(unlocked_titles, $1)
+     WHERE id = $2`,
+                [newTitle, req.user.userId]
+            );
+        }
 
         await client.query("COMMIT");
 
@@ -122,8 +167,9 @@ router.patch("/:id/complete", authenticateToken, async (req, res) => {
             ok: true,
             message: "Goal completed successfully",
             goal: updatedGoal.rows[0],
-            totalPoints: userPoints.rows[0].points,
-            rewardUnlocked: userPoints.rows[0].points % 1000 === 0,
+            totalPoints,
+            newAvatarUnlocked: newAvatar,
+            newTitleUnlocked: newTitle,
         });
     } catch (error) {
         await client.query("ROLLBACK");

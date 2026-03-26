@@ -42,9 +42,18 @@ export default function NavBar() {
                 </>
             ) : (
                 <>
-                    <span style={{ marginLeft: "auto" }}>
-                        Signed in as {user?.email}
-                    </span>
+                    <div style={{ marginLeft: "auto", textAlign: "right" }}>
+                    <div style={{ fontSize: 22 }}>
+                      {user?.selected_avatar === "lotus-avatar"
+                        ? "🪷"
+                        : user?.selected_avatar === "elite-athlete-avatar"
+                        ? "🏃"
+                        : "🙂"}
+                    </div>
+                    <div><strong>{user?.username || "User"}</strong></div>
+                    <div style={{ fontSize: 12 }}>{user?.selected_title || "New Member"}</div>
+                    </div>
+
                     <button onClick={logout} style={{ padding: "6px 10px" }}>
                         Logout
                     </button>
