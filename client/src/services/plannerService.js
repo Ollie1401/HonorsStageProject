@@ -40,6 +40,21 @@ export async function createPlannerEntry(entry) {
     return data;
 }
 
+export async function completePlannerEntry(id) {
+    const response = await fetch(`${API_URL}/planner/${id}/complete`, {
+        method: "PATCH",
+        headers: getAuthHeaders(),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.error || "Failed to complete planner entry");
+    }
+
+    return data;
+}
+
 export async function deletePlannerEntry(id) {
     const response = await fetch(`${API_URL}/planner/${id}`, {
         method: "DELETE",

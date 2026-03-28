@@ -90,4 +90,67 @@ router.delete("/:id", authenticateToken, async (req, res) => {
     }
 });
 
+router.patch("/:id/complete", authenticateToken, async (req, res) => {
+    const client = await pool.connect();
+
+    try {
+        const { id } = req.params;
+
+        await client.query("BEGIN");
+
+        const plannerResult = await client.query(
+            `SELECT id, title, entry_type, entry_date, notes
+             FROM planner_entries
+             WHERE id = $1 AND user_id = $2`,
+            [id, req.user.userId]
+        );
+
+        if (plannerResult.rows.length === 0) {
+            await client.query("ROLLBACK");
+            return res.status(404).json({
+                ok: false,
+                error: "Planner entry not found",
+            });
+        }
+
+        const plannerEntry = plannerResult.rows[0];
+
+        const logResult = await client.query(
+            `INSERT INTO log_entries (user_id, title, entry_type, entry_date, notes, source, completed_at)
+             VALUES ($1, $2, $3, $4, $5, 'planner', NOW())
+             RETURNING id, title, entry_type, entry_date, notes, source, completed_at, created_at`,
+            [
+                req.user.userId,
+                plannerEntry.title,
+                plannerEntry.entry_type,
+                plannerEntry.entry_date,
+                plannerEntry.notes,
+            ]
+        );
+
+        await client.query(
+            `DELETE FROM planner_entries
+             WHERE id = $1 AND user_id = $2`,
+            [id, req.user.userId]
+        );
+
+        await client.query("COMMIT");
+
+        return res.json({
+            ok: true,
+            message: "Planner entry marked complete and moved to log",
+            entry: logResult.rows[0],
+        });
+    } catch (error) {
+        await client.query("ROLLBACK");
+        console.error("Complete planner entry error:", error);
+        return res.status(500).json({
+            ok: false,
+            error: "Server error while completing planner entry",
+        });
+    } finally {
+        client.release();
+    }
+});
+
 export default router;

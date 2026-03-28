@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
     getPlannerEntries,
     createPlannerEntry,
+    completePlannerEntry,
     deletePlannerEntry,
 } from "../services/plannerService";
 
@@ -123,6 +124,19 @@ export default function Planner() {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function handleComplete(id) {
+        setMessage("");
+        setError("");
+
+        try {
+            await completePlannerEntry(id);
+            setMessage("Planner entry completed and moved to log");
+            await loadEntries();
+        } catch (err) {
+            setError(err.message);
         }
     }
 
@@ -286,6 +300,7 @@ export default function Planner() {
                                 <option value="workout">Workout</option>
                                 <option value="appointment">Appointment</option>
                                 <option value="meal">Meal</option>
+                                <option value="other">Other</option>
                             </select>
                         </label>
 
@@ -345,12 +360,21 @@ export default function Planner() {
                                     <h3 style={{ margin: "0 0 8px 0" }}>{entry.title}</h3>
                                     <p><strong>Type:</strong> {entry.entry_type}</p>
                                     {entry.notes && <p><strong>Notes:</strong> {entry.notes}</p>}
-                                    <button
-                                        onClick={() => handleDelete(entry.id)}
-                                        style={{ marginTop: 8, padding: "6px 10px" }}
-                                    >
-                                        Delete
-                                    </button>
+                                    <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                                        <button
+                                            onClick={() => handleComplete(entry.id)}
+                                            style={{ padding: "6px 10px" }}
+                                        >
+                                            Mark Complete
+                                        </button>
+
+                                        <button
+                                            onClick={() => handleDelete(entry.id)}
+                                            style={{ padding: "6px 10px" }}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>

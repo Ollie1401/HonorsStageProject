@@ -7,6 +7,7 @@ import plannerRoutes from "./routes/planner.js";
 import goalsRoutes from "./routes/goals.js";
 import rewardsRoutes from "./routes/rewards.js";
 import profileRoutes from "./routes/profile.js";
+import logRoutes from "./routes/log.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use("/planner", plannerRoutes);
 app.use("/goals", goalsRoutes);
 app.use("/rewards", rewardsRoutes);
 app.use("/profile", profileRoutes); 
+app.use("/log", logRoutes);
 
 app.get("/health", (req, res) => {
     res.json({ ok: true, app: "DailyThrive", message: "API is running" });
