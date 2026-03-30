@@ -5,14 +5,23 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
+    const [authLoading, setAuthLoading] = useState(true);
 
     useEffect(() => {
-        const savedToken = localStorage.getItem("token");
-        const savedUser = localStorage.getItem("user");
+        try {
+            const savedToken = localStorage.getItem("token");
+            const savedUser = localStorage.getItem("user");
 
-        if (savedToken && savedUser) {
-            setToken(savedToken);
-            setUser(JSON.parse(savedUser));
+            if (savedToken && savedUser) {
+                setToken(savedToken);
+                setUser(JSON.parse(savedUser));
+            }
+        } catch (error) {
+            console.error("Failed to restore auth state:", error);
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+        } finally {
+            setAuthLoading(false);
         }
     }, []);
 
@@ -40,6 +49,7 @@ export function AuthProvider({ children }) {
             value={{
                 user,
                 token,
+                authLoading,
                 isAuthenticated: !!token,
                 login,
                 logout,

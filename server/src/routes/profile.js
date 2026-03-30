@@ -71,7 +71,7 @@ router.patch("/avatar", authenticateToken, async (req, res) => {
             `UPDATE users
        SET selected_avatar = $1
        WHERE id = $2
-       RETURNING id, email, points, selected_avatar, unlocked_avatars`,
+       RETURNING id, email, username, points, selected_avatar, unlocked_avatars, selected_title, unlocked_titles`,
             [avatar, req.user.userId]
         );
 

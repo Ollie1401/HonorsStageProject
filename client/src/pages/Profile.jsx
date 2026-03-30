@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   getProfile,
   updateAvatar,
-  updateUsername,
   updateTitle,
 } from "../services/profileService";
 import { useAuth } from "../context/AuthContext";
@@ -22,7 +21,6 @@ export default function Profile() {
   const { updateUser } = useAuth();
 
   const [profile, setProfile] = useState(null);
-  const [usernameInput, setUsernameInput] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -32,7 +30,6 @@ useEffect(() => {
       setError("");
       const data = await getProfile();
       setProfile(data.profile);
-      setUsernameInput(data.profile.username || "");
     } catch (err) {
       setError(err.message);
     }
@@ -48,19 +45,6 @@ useEffect(() => {
       setProfile(data.profile);
       updateUser(data.profile);
       setMessage("Avatar updated successfully");
-    } catch (err) {
-      setError(err.message);
-    }
-  }
-
-  async function handleUsernameUpdate() {
-    try {
-      setMessage("");
-      setError("");
-      const data = await updateUsername(usernameInput);
-      setProfile(data.profile);
-      updateUser(data.profile);
-      setMessage("Username updated successfully");
     } catch (err) {
       setError(err.message);
     }
@@ -103,20 +87,6 @@ useEffect(() => {
 
       {message && <p>{message}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <div style={{ marginBottom: 24 }}>
-        <h2>Set Username</h2>
-        <input
-          type="text"
-          value={usernameInput}
-          onChange={(event) => setUsernameInput(event.target.value)}
-          placeholder="Enter username"
-          style={{ padding: 8, marginRight: 8 }}
-        />
-        <button onClick={handleUsernameUpdate} style={{ padding: "8px 12px" }}>
-          Save Username
-        </button>
-      </div>
 
       <div style={{ marginBottom: 24 }}>
         <h2>Choose Your Avatar</h2>
