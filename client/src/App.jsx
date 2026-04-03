@@ -16,7 +16,7 @@ export default function App() {
     return (
         <>
             <NavBar />
-            <main style={{ padding: 16 }}>
+            <main className="app-shell">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route

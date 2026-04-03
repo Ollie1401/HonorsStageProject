@@ -94,47 +94,29 @@ export default function Log() {
     }
 
     return (
-        <div>
+        <div className="page">
             <h1>Log</h1>
             <p>Track completed meals, workouts, appointments and other entries.</p>
 
-            <div
-                style={{
-                    border: "1px solid #ddd",
-                    borderRadius: 12,
-                    padding: 16,
-                    maxWidth: 500,
-                    marginBottom: 24,
-                    background: "#fafafa",
-                }}
-            >
-                <h2 style={{ marginTop: 0 }}>Add Log Entry</h2>
+            <div className="card card-soft form-card">
+                <h2>Add Log Entry</h2>
 
-                <form
-                    onSubmit={handleSubmit}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 12,
-                    }}
-                >
-                    <label>
+                <form onSubmit={handleSubmit} className="form-stack">
+                    <label className="form-label">
                         Title
                         <input
                             type="text"
                             value={title}
                             onChange={(event) => setTitle(event.target.value)}
                             required
-                            style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                         />
                     </label>
 
-                    <label>
+                    <label className="form-label">
                         Type
                         <select
                             value={entryType}
                             onChange={(event) => setEntryType(event.target.value)}
-                            style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                         >
                             <option value="meal">Meal</option>
                             <option value="workout">Workout</option>
@@ -143,35 +125,33 @@ export default function Log() {
                         </select>
                     </label>
 
-                    <label>
+                    <label className="form-label">
                         Date
                         <input
                             type="date"
                             value={entryDate}
                             onChange={(event) => setEntryDate(event.target.value)}
                             required
-                            style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                         />
                     </label>
 
-                    <label>
+                    <label className="form-label">
                         Notes
                         <textarea
                             value={notes}
                             onChange={(event) => setNotes(event.target.value)}
                             rows="4"
-                            style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                         />
                     </label>
 
-                    <button type="submit" disabled={loading} style={{ padding: 10 }}>
+                    <button type="submit" disabled={loading} className="btn">
                         {loading ? "Saving..." : "Add to Log"}
                     </button>
                 </form>
             </div>
 
-            {message && <p>{message}</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {message && <p className="message message-success">{message}</p>}
+            {error && <p className="message message-error">{error}</p>}
 
             <h2>Logged Entries</h2>
 
@@ -181,27 +161,20 @@ export default function Log() {
                 Object.keys(groupedEntries)
                     .sort((a, b) => b.localeCompare(a))
                     .map((date) => (
-                        <div key={date} style={{ marginBottom: 24 }}>
+                        <div key={date} className="section-block">
                             <h3>{date}</h3>
 
-                            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                            <div className="stack">
                                 {groupedEntries[date].map((entry) => (
-                                    <div
-                                        key={entry.id}
-                                        style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: 8,
-                                            padding: 12,
-                                        }}
-                                    >
-                                        <h4 style={{ margin: "0 0 8px 0" }}>{entry.title}</h4>
+                                    <div key={entry.id} className="card">
+                                        <h4>{entry.title}</h4>
                                         <p><strong>Type:</strong> {entry.entry_type}</p>
                                         <p><strong>Source:</strong> {entry.source}</p>
                                         {entry.notes && <p><strong>Notes:</strong> {entry.notes}</p>}
 
                                         <button
                                             onClick={() => handleDelete(entry.id)}
-                                            style={{ marginTop: 8, padding: "6px 10px" }}
+                                            className="btn btn-small btn-secondary"
                                         >
                                             Delete
                                         </button>

@@ -25,6 +25,11 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
+    useEffect(() => {
+        const theme = user?.theme_preference || "light";
+        document.documentElement.setAttribute("data-theme", theme);
+    }, [user]);
+
     function login(authToken, authUser) {
         localStorage.setItem("token", authToken);
         localStorage.setItem("user", JSON.stringify(authUser));

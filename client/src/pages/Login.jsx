@@ -33,38 +33,34 @@ export default function Login() {
     }
 
     return (
-        <div>
+        <div className="page auth-wrap">
             <h1>Login</h1>
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 400 }}>
-                <label>
+            <form onSubmit={handleSubmit} className="card form-stack auth-card">
+                <label className="form-label">
                     Email
                     <input
                         type="email"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
-                        required
-                        style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
-                    />
+                        required                    />
                 </label>
 
-                <label>
+                <label className="form-label">
                     Password
                     <input
                         type="password"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
-                        required
-                        style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
-                    />
+                        required                    />
                 </label>
 
-                <button type="submit" disabled={loading} style={{ padding: 10 }}>
+                <button type="submit" disabled={loading} className="btn btn-full">
                     {loading ? "Logging in..." : "Login"}
                 </button>
             </form>
 
-            {message && <p style={{ marginTop: 12 }}>{message}</p>}
-            {error && <p style={{ marginTop: 12, color: "red" }}>{error}</p>}
+            {message && <p className="message message-success">{message}</p>}
+            {error && <p className="message message-error">{error}</p>}
         </div>
     );
 }

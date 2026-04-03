@@ -154,47 +154,24 @@ export default function Planner() {
     }
 
     return (
-        <div>
+        <div className="page">
             <h1>Planner</h1>
 
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: 16,
-                    maxWidth: 700,
-                }}
-            >
-                <button onClick={goToPreviousMonth} style={{ padding: "8px 12px" }}>
+            <div className="calendar-nav">
+                <button onClick={goToPreviousMonth} className="btn btn-small btn-secondary">
                     ← Previous
                 </button>
 
-                <h2 style={{ margin: 0 }}>{getMonthName(currentMonth)}</h2>
+                <h2>{getMonthName(currentMonth)}</h2>
 
-                <button onClick={goToNextMonth} style={{ padding: "8px 12px" }}>
+                <button onClick={goToNextMonth} className="btn btn-small btn-secondary">
                     Next →
                 </button>
             </div>
 
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(7, 1fr)",
-                    gap: 8,
-                    maxWidth: 700,
-                    marginBottom: 24,
-                }}
-            >
+            <div className="calendar-grid">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName) => (
-                    <div
-                        key={dayName}
-                        style={{
-                            fontWeight: "bold",
-                            textAlign: "center",
-                            padding: 8,
-                        }}
-                    >
+                    <div key={dayName} className="calendar-day-header">
                         {dayName}
                     </div>
                 ))}
@@ -216,40 +193,20 @@ export default function Planner() {
                                 setSelectedDate(formattedDate);
                                 setShowEntryForm(true);
                             }}
-                            style={{
-                                minHeight: 100,
-                                border: isSelected ? "2px solid #333" : "1px solid #ddd",
-                                borderRadius: 8,
-                                background: isSelected ? "#f3f3f3" : "white",
-                                padding: 8,
-                                textAlign: "left",
-                                cursor: "pointer",
-                            }}
+                            className={`calendar-cell ${isSelected ? "selected" : ""}`}
                         >
-                            <div style={{ fontWeight: "bold", marginBottom: 6 }}>
+                            <div>
                                 {date.getDate()}
                             </div>
 
                             {dayEntries.slice(0, 2).map((entry) => (
-                                <div
-                                    key={entry.id}
-                                    style={{
-                                        fontSize: 11,
-                                        marginBottom: 4,
-                                        padding: "2px 4px",
-                                        borderRadius: 4,
-                                        background: "#eaeaea",
-                                        overflow: "hidden",
-                                        whiteSpace: "nowrap",
-                                        textOverflow: "ellipsis",
-                                    }}
-                                >
+                                <div key={entry.id} className="entry-pill">
                                     {entry.title}
                                 </div>
                             ))}
 
                             {entryCount > 2 && (
-                                <div style={{ fontSize: 11, marginTop: 4 }}>
+                                <div className="small-text">
                                     +{entryCount - 2} more
                                 </div>
                             )}
@@ -259,43 +216,25 @@ export default function Planner() {
             </div>
 
             {showEntryForm && selectedDate && (
-                <div
-                    style={{
-                        border: "1px solid #ddd",
-                        borderRadius: 12,
-                        padding: 16,
-                        maxWidth: 500,
-                        marginBottom: 24,
-                        background: "#fafafa",
-                    }}
-                >
-                    <h2 style={{ marginTop: 0 }}>Add Entry for {selectedDate}</h2>
+                <div className="card card-soft form-card">
+                    <h2>Add Entry for {selectedDate}</h2>
 
-                    <form
-                        onSubmit={handleSubmit}
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 12,
-                        }}
-                    >
-                        <label>
+                    <form onSubmit={handleSubmit} className="form-stack">
+                        <label className="form-label">
                             Title
                             <input
                                 type="text"
                                 value={title}
                                 onChange={(event) => setTitle(event.target.value)}
                                 required
-                                style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                             />
                         </label>
 
-                        <label>
+                        <label className="form-label">
                             Type
                             <select
                                 value={entryType}
                                 onChange={(event) => setEntryType(event.target.value)}
-                                style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                             >
                                 <option value="workout">Workout</option>
                                 <option value="appointment">Appointment</option>
@@ -304,18 +243,17 @@ export default function Planner() {
                             </select>
                         </label>
 
-                        <label>
+                        <label className="form-label">
                             Notes
                             <textarea
                                 value={notes}
                                 onChange={(event) => setNotes(event.target.value)}
                                 rows="4"
-                                style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                             />
                         </label>
 
-                        <div style={{ display: "flex", gap: 10 }}>
-                            <button type="submit" disabled={loading} style={{ padding: 10 }}>
+                        <div className="actions-row">
+                            <button type="submit" disabled={loading} className="btn">
                                 {loading ? "Saving..." : "Add Entry to Selected Date"}
                             </button>
 
@@ -328,7 +266,7 @@ export default function Planner() {
                                     setEntryType("workout");
                                     setNotes("");
                                 }}
-                                style={{ padding: 10 }}
+                                className="btn btn-secondary"
                             >
                                 Cancel
                             </button>
@@ -337,8 +275,8 @@ export default function Planner() {
                 </div>
             )}
 
-            {message && <p>{message}</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {message && <p className="message message-success">{message}</p>}
+            {error && <p className="message message-error">{error}</p>}
 
             {selectedDate && (
                 <>
@@ -347,30 +285,23 @@ export default function Planner() {
                     {selectedDateEntries.length === 0 ? (
                         <p>No planner entries for this date.</p>
                     ) : (
-                        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                            <div className="stack">
                             {selectedDateEntries.map((entry) => (
-                                <div
-                                    key={entry.id}
-                                    style={{
-                                        border: "1px solid #ddd",
-                                        borderRadius: 8,
-                                        padding: 12,
-                                    }}
-                                >
-                                    <h3 style={{ margin: "0 0 8px 0" }}>{entry.title}</h3>
+                                <div key={entry.id} className="card">
+                                    <h3>{entry.title}</h3>
                                     <p><strong>Type:</strong> {entry.entry_type}</p>
                                     {entry.notes && <p><strong>Notes:</strong> {entry.notes}</p>}
-                                    <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                                    <div className="actions-row">
                                         <button
                                             onClick={() => handleComplete(entry.id)}
-                                            style={{ padding: "6px 10px" }}
+                                            className="btn btn-small"
                                         >
                                             Mark Complete
                                         </button>
 
                                         <button
                                             onClick={() => handleDelete(entry.id)}
-                                            style={{ padding: "6px 10px" }}
+                                            className="btn btn-small btn-secondary"
                                         >
                                             Delete
                                         </button>

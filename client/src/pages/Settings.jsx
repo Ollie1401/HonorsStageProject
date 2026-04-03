@@ -11,17 +11,6 @@ import {
     deleteAccount,
 } from "../services/settingsService";
 
-function cardStyle() {
-    return {
-        border: "1px solid #ddd",
-        borderRadius: 12,
-        padding: 16,
-        marginBottom: 20,
-        background: "#fafafa",
-        textAlign: "left",
-    };
-}
-
 export default function Settings() {
     const navigate = useNavigate();
     const { user, updateUser, logout } = useAuth();
@@ -94,6 +83,12 @@ export default function Settings() {
 
             const data = await updateThemePreference(themePreference);
             setSettings(data.settings);
+
+            updateUser({
+                ...(user || {}),
+                theme_preference: data.settings.theme_preference,
+            });
+
             setMessage("Theme updated successfully");
         } catch (err) {
             setError(err.message);
@@ -171,160 +166,122 @@ export default function Settings() {
     }
 
     return (
-        <div>
+        <div className="page">
             <h1>Settings</h1>
 
-            {message && <p>{message}</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {message && <p className="message message-success">{message}</p>}
+            {error && <p className="message message-error">{error}</p>}
 
-            <div style={cardStyle()}>
-                <h2 style={{ marginTop: 0 }}>Account</h2>
+            <div className="card card-soft stack">
+                <h2>Account</h2>
 
-                <p><strong>Email:</strong> {profile.email}</p>
-                <p><strong>Username:</strong> {profile.username || "Not set"}</p>
-                <p><strong>Points:</strong> {profile.points || 0}</p>
+                <div className="info-list">
+                    <p><strong>Email:</strong> {profile.email}</p>
+                    <p><strong>Username:</strong> {profile.username || "Not set"}</p>
+                    <p><strong>Points:</strong> {profile.points || 0}</p>
+                </div>
 
-                <div style={{ marginTop: 16 }}>
-                    <label>
+                <div className="stack">
+                    <label className="form-label inline-field">
                         Username
                         <input
                             type="text"
                             value={usernameInput}
                             onChange={(event) => setUsernameInput(event.target.value)}
-                            style={{
-                                display: "block",
-                                padding: 8,
-                                marginTop: 6,
-                                width: "100%",
-                                maxWidth: 300,
-                            }}
                         />
                     </label>
 
-                    <button
-                        onClick={handleUsernameSave}
-                        style={{ marginTop: 10, padding: "8px 12px" }}
-                    >
-                        Save Username
-                    </button>
+                    <div className="actions-row">
+                        <button className="btn" onClick={handleUsernameSave}>
+                            Save Username
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div style={cardStyle()}>
-                <h2 style={{ marginTop: 0 }}>Appearance</h2>
+            <div className="card card-soft stack">
+                <h2>Appearance</h2>
 
-                <label style={{ display: "block", marginBottom: 12 }}>
+                <label className="form-label inline-field">
                     Theme
                     <select
                         value={themePreference}
                         onChange={(event) => setThemePreference(event.target.value)}
-                        style={{
-                            display: "block",
-                            padding: 8,
-                            marginTop: 6,
-                            width: "100%",
-                            maxWidth: 300,
-                        }}
                     >
                         <option value="light">Light</option>
                         <option value="dark">Dark</option>
                     </select>
                 </label>
 
-                <button onClick={handleThemeSave} style={{ padding: "8px 12px" }}>
-                    Save Theme
-                </button>
+                <div className="actions-row">
+                    <button className="btn" onClick={handleThemeSave}>
+                        Save Theme
+                    </button>
+                </div>
             </div>
 
-            <div style={cardStyle()}>
-                <h2 style={{ marginTop: 0 }}>Security</h2>
+            <div className="card stack">
+                <h2>Security</h2>
 
-                <form onSubmit={handlePasswordChange}>
-                    <label style={{ display: "block", marginBottom: 12 }}>
+                <form onSubmit={handlePasswordChange} className="form-stack">
+                    <label className="form-label inline-field">
                         Current Password
                         <input
                             type="password"
                             value={currentPassword}
                             onChange={(event) => setCurrentPassword(event.target.value)}
-                            style={{
-                                display: "block",
-                                padding: 8,
-                                marginTop: 6,
-                                width: "100%",
-                                maxWidth: 300,
-                            }}
                         />
                     </label>
 
-                    <label style={{ display: "block", marginBottom: 12 }}>
+                    <label className="form-label inline-field">
                         New Password
                         <input
                             type="password"
                             value={newPassword}
                             onChange={(event) => setNewPassword(event.target.value)}
-                            style={{
-                                display: "block",
-                                padding: 8,
-                                marginTop: 6,
-                                width: "100%",
-                                maxWidth: 300,
-                            }}
                         />
                     </label>
 
-                    <button type="submit" style={{ padding: "8px 12px" }}>
-                        Change Password
-                    </button>
+                    <div className="actions-row">
+                        <button type="submit" className="btn">
+                            Change Password
+                        </button>
+                    </div>
                 </form>
             </div>
 
-            <div style={cardStyle()}>
-                <h2 style={{ marginTop: 0 }}>Data & Privacy</h2>
+            <div className="card stack">
+                <h2>Data & Privacy</h2>
                 <p>
                     Your data is stored securely and this page gives you direct control over export
                     and deletion.
                 </p>
 
-                <button
-                    onClick={handleExportData}
-                    style={{ padding: "8px 12px", marginRight: 10 }}
-                >
-                    Export My Data
-                </button>
+                <div className="actions-row">
+                    <button className="btn btn-secondary" onClick={handleExportData}>
+                        Export My Data
+                    </button>
+                </div>
             </div>
 
-            <div
-                style={{
-                    ...cardStyle(),
-                    border: "1px solid #d66",
-                    background: "#fff5f5",
-                }}
-            >
-                <h2 style={{ marginTop: 0 }}>Danger Zone</h2>
+            <div className="card card-danger stack">
+                <h2>Danger Zone</h2>
                 <p>Deleting your account permanently removes your data.</p>
 
-                <label style={{ display: "block", marginBottom: 12 }}>
+                <label className="form-label inline-field">
                     Confirm Password
                     <input
                         type="password"
                         value={deletePassword}
                         onChange={(event) => setDeletePassword(event.target.value)}
-                        style={{
-                            display: "block",
-                            padding: 8,
-                            marginTop: 6,
-                            width: "100%",
-                            maxWidth: 300,
-                        }}
                     />
                 </label>
 
-                <button
-                    onClick={handleDeleteAccount}
-                    style={{ padding: "8px 12px" }}
-                >
-                    Delete My Account
-                </button>
+                <div className="actions-row">
+                    <button className="btn btn-danger" onClick={handleDeleteAccount}>
+                        Delete My Account
+                    </button>
+                </div>
             </div>
         </div>
     );

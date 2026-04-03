@@ -91,91 +91,72 @@ export default function Goals() {
     const completedGoals = goals.filter((goal) => goal.is_completed);
 
     return (
-        <div>
+        <div className="page">
             <h1>Goals</h1>
 
-            <form
-                onSubmit={handleSubmit}
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 12,
-                    maxWidth: 500,
-                    marginBottom: 24,
-                }}
-            >
-                <label>
+            <form onSubmit={handleSubmit} className="card form-stack form-card">
+                <label className="form-label">
                     Goal Title
                     <input
                         type="text"
                         value={title}
                         onChange={(event) => setTitle(event.target.value)}
                         required
-                        style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                     />
                 </label>
 
-                <label>
+                <label className="form-label">
                     Description
                     <textarea
                         value={description}
                         onChange={(event) => setDescription(event.target.value)}
                         rows="3"
-                        style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                     />
                 </label>
 
-                <label>
+                <label className="form-label">
                     Deadline
                     <input
                         type="date"
                         value={deadline}
                         onChange={(event) => setDeadline(event.target.value)}
-                        style={{ display: "block", width: "100%", padding: 8, marginTop: 4 }}
                     />
                 </label>
 
                 <p><strong>Reward:</strong> 100 points</p>
 
-                <button type="submit" disabled={loading} style={{ padding: 10 }}>
+                <button type="submit" disabled={loading} className="btn">
                     {loading ? "Creating Goal..." : "Create Goal"}
                 </button>
             </form>
 
-            {message && <p>{message}</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {message && <p className="message message-success">{message}</p>}
+            {error && <p className="message message-error">{error}</p>}
 
             <h2>Active Goals</h2>
 
             {activeGoals.length === 0 ? (
                 <p>No active goals yet.</p>
             ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
+                <div className="stack section-block">
                     {activeGoals.map((goal) => (
-                        <div
-                            key={goal.id}
-                            style={{
-                                border: "1px solid #ddd",
-                                borderRadius: 8,
-                                padding: 12,
-                            }}
-                        >
-                            <h3 style={{ margin: "0 0 8px 0" }}>{goal.title}</h3>
+                        <div key={goal.id} className="card">
+                            <h3>{goal.title}</h3>
                             {goal.description && <p>{goal.description}</p>}
                             {goal.deadline && <p><strong>Deadline:</strong> {goal.deadline}</p>}
                             <p><strong>Reward:</strong> 100 points</p>
 
-                            <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+                            <div className="actions-row">
                                 <button
                                     onClick={() => handleComplete(goal.id)}
-                                    style={{ padding: "6px 10px" }}
+                                    className="btn btn-small"
                                 >
                                     Mark Complete
                                 </button>
 
                                 <button
                                     onClick={() => handleDelete(goal.id)}
-                                    style={{ padding: "6px 10px" }}
+                                    className="btn btn-small btn-secondary"
                                 >
                                     Delete
                                 </button>
@@ -190,18 +171,10 @@ export default function Goals() {
             {completedGoals.length === 0 ? (
                 <p>No completed goals yet.</p>
             ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div className="stack">
                     {completedGoals.map((goal) => (
-                        <div
-                            key={goal.id}
-                            style={{
-                                border: "1px solid #ddd",
-                                borderRadius: 8,
-                                padding: 12,
-                                opacity: 0.8,
-                            }}
-                        >
-                            <h3 style={{ margin: "0 0 8px 0" }}>{goal.title}</h3>
+                        <div key={goal.id} className="card card-muted">
+                            <h3>{goal.title}</h3>
                             {goal.description && <p>{goal.description}</p>}
                             {goal.deadline && <p><strong>Deadline:</strong> {goal.deadline}</p>}
                             <p><strong>Reward:</strong> 100 points</p>

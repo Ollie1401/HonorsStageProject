@@ -68,57 +68,48 @@ useEffect(() => {
   }
 
   return (
-    <div>
+      <div className="page">
       <h1>Profile</h1>
 
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 48, marginBottom: 8 }}>
+        <div className="card hero-card section-block">
+        <div className="emoji-xl">
           {getAvatarEmoji(profile.selected_avatar)}
         </div>
-        <h2 style={{ margin: "0 0 4px 0" }}>
+        <h2>
           {profile.username || "Set your username"}
         </h2>
-        <p style={{ margin: "0 0 12px 0" }}>
+        <p className="page-subtitle">
           {profile.selected_title || "New Member"}
         </p>
         <p><strong>Email:</strong> {profile.email}</p>
         <p><strong>Total Points:</strong> {profile.points}</p>
       </div>
 
-      {message && <p>{message}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+          {message && <p className="message message-success">{message}</p>}
+          {error && <p className="message message-error">{error}</p>}
 
-      <div style={{ marginBottom: 24 }}>
+      <div className="card hero-card section-block">
         <h2>Choose Your Avatar</h2>
 
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div className="page-grid">
           {avatarOptions.map((avatar) => {
             const isUnlocked = profile.unlocked_avatars?.includes(avatar.id);
             const isSelected = profile.selected_avatar === avatar.id;
 
             return (
-              <div
-                key={avatar.id}
-                style={{
-                  border: isSelected ? "2px solid #333" : "1px solid #ddd",
-                  borderRadius: 8,
-                  padding: 12,
-                  minWidth: 160,
-                  opacity: isUnlocked ? 1 : 0.5,
-                }}
-              >
-                <div style={{ fontSize: 32, marginBottom: 8 }}>{avatar.emoji}</div>
-                <p style={{ margin: "0 0 8px 0" }}>
+                <div className={`card option-card ${isSelected ? "selected" : ""} ${!isUnlocked ? "locked" : ""}`}>
+                <div className="emoji-lg">{avatar.emoji}</div>
+                    <p className="page-subtitle">
                   <strong>{avatar.label}</strong>
                 </p>
-                <p style={{ margin: "0 0 8px 0" }}>
+                    <p className="page-subtitle">
                   {isUnlocked ? "Unlocked" : "Locked"}
                 </p>
 
                 <button
                   onClick={() => handleAvatarChange(avatar.id)}
                   disabled={!isUnlocked || isSelected}
-                  style={{ padding: "6px 10px" }}
+                  className="btn btn-small"
                 >
                   {isSelected ? "Selected" : "Select"}
                 </button>
@@ -131,27 +122,19 @@ useEffect(() => {
       <div>
         <h2>Choose Your Title</h2>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div className="stack">
           {profile.unlocked_titles?.map((title) => {
             const isSelected = profile.selected_title === title;
 
             return (
-              <div
-                key={title}
-                style={{
-                  border: isSelected ? "2px solid #333" : "1px solid #ddd",
-                  borderRadius: 8,
-                  padding: 12,
-                  maxWidth: 300,
-                }}
-              >
-                <p style={{ margin: "0 0 8px 0" }}>
+                <div className={`card option-card ${isSelected ? "selected" : ""}`}>
+                    <p className="page-subtitle">
                   <strong>{title}</strong>
                 </p>
                 <button
                   onClick={() => handleTitleChange(title)}
                   disabled={isSelected}
-                  style={{ padding: "6px 10px" }}
+                  className="btn btn-small"
                 >
                   {isSelected ? "Selected" : "Select"}
                 </button>

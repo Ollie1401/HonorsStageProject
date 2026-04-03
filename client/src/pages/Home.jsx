@@ -104,15 +104,15 @@ export default function Home() {
 
     if (!isAuthenticated) {
         return (
-            <div>
+            <div className="page">
                 <h1>DailyThrive</h1>
                 <p>Your health planner for meals, workouts, goals and progress.</p>
 
-                <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-                    <button onClick={() => navigate("/login")} style={{ padding: "10px 14px" }}>
+                <div className="actions-row">
+                    <button onClick={() => navigate("/login")} className="btn">
                         Login
                     </button>
-                    <button onClick={() => navigate("/register")} style={{ padding: "10px 14px" }}>
+                    <button onClick={() => navigate("/register")} className="btn btn-secondary">
                         Register
                     </button>
                 </div>
@@ -121,77 +121,47 @@ export default function Home() {
     }
 
     return (
-        <div>
+        <div className="page">
             <h1>Home</h1>
 
-            {message && <p>{message}</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {message && <p className="message message-success">{message}</p>}
+            {error && <p className="message message-error">{error}</p>}
             {loading && <p>Loading home page...</p>}
 
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                    gap: 16,
-                }}
-            >
-                <div
-                    style={{
-                        border: "1px solid #ddd",
-                        borderRadius: 12,
-                        padding: 16,
-                        textAlign: "left",
-                        background: "#fafafa",
-                    }}
-                >
-                    <div style={{ fontSize: 36, marginBottom: 8 }}>
+            <div className="page-grid">
+                <div className="card hero-card">
+                    <div className="emoji-xl">
                         {getAvatarEmoji(user?.selected_avatar)}
                     </div>
-                    <h2 style={{ marginTop: 0 }}>
+                    <h2>
                         {getGreeting()}, {user?.username || "User"}
                     </h2>
-                    <p style={{ marginBottom: 6 }}>
+                    <p>
                         <strong>Title:</strong> {user?.selected_title || "New Member"}
                     </p>
-                    <p style={{ marginBottom: 0 }}>
+                    <p>
                         <strong>Total Points:</strong> {user?.points || 0}
                     </p>
                 </div>
 
-                <div
-                    style={{
-                        border: "1px solid #ddd",
-                        borderRadius: 12,
-                        padding: 16,
-                        textAlign: "left",
-                        background: "#fafafa",
-                    }}
-                >
-                    <h2 style={{ marginTop: 0 }}>Today’s Progress</h2>
+                <div className="card card-soft">
+                    <h2>Today’s Progress</h2>
                     <p><strong>Total Planned:</strong> {todaysEntries.length}</p>
                     <p><strong>Meals:</strong> {mealCountToday}</p>
                     <p><strong>Workouts:</strong> {workoutCountToday}</p>
                     <p><strong>Appointments:</strong> {appointmentCountToday}</p>
                 </div>
 
-                <div
-                    style={{
-                        border: "1px solid #ddd",
-                        borderRadius: 12,
-                        padding: 16,
-                        textAlign: "left",
-                        background: "#fafafa",
-                    }}
-                >
-                    <h2 style={{ marginTop: 0 }}>Goals Snapshot</h2>
+                <div className="card card-soft">
+                    <h2>Goals Snapshot</h2>
                     <p><strong>Active Goals:</strong> {activeGoals.length}</p>
                     <p><strong>Completed Goals:</strong> {completedGoals.length}</p>
 
                     {activeGoals.slice(0, 2).map((goal) => (
-                        <div key={goal.id} style={{ marginTop: 10 }}>
+                        <div key={goal.id} className="stack">
                             <strong>{goal.title}</strong>
                             {goal.deadline && (
-                                <p style={{ margin: "4px 0 0 0" }}>Deadline: {goal.deadline}</p>
+                                <p className="small-text">Deadline: {goal.deadline}</p>
                             )}
                         </div>
                     ))}
@@ -199,69 +169,53 @@ export default function Home() {
                     {activeGoals.length === 0 && <p>No active goals yet.</p>}
                 </div>
 
-                <div
-                    style={{
-                        border: "1px solid #ddd",
-                        borderRadius: 12,
-                        padding: 16,
-                        textAlign: "left",
-                        background: "#fafafa",
-                    }}
-                >
-                    <h2 style={{ marginTop: 0 }}>Quick Actions</h2>
+                <div className="card card-soft">
+                    <h2>Quick Actions</h2>
 
-                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                        <button onClick={() => navigate("/planner")} style={{ padding: "10px 12px" }}>
+                    <div className="quick-actions">
+                        <button onClick={() => navigate("/planner")} className="btn btn-secondary">
                             Go to Planner
                         </button>
 
-                        <button onClick={() => navigate("/log")} style={{ padding: "10px 12px" }}>
+                        <button onClick={() => navigate("/log")} className="btn btn-secondary">
                             Go to Log
                         </button>
 
-                        <button onClick={() => navigate("/goals")} style={{ padding: "10px 12px" }}>
+                        <button onClick={() => navigate("/goals")} className="btn btn-secondary">
                             View Goals
                         </button>
 
-                        <button onClick={() => navigate("/rewards")} style={{ padding: "10px 12px" }}>
+                        <button onClick={() => navigate("/rewards")} className="btn btn-secondary">
                             View Rewards
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div style={{ marginTop: 24 }}>
+            <div className="spaced-top stack">
                 <h2>Today’s Planner</h2>
 
                 {todaysEntries.length === 0 ? (
                     <p>No planner entries for today.</p>
                 ) : (
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div className="card">
                         {todaysEntries.map((entry) => (
-                            <div
-                                key={entry.id}
-                                style={{
-                                    border: "1px solid #ddd",
-                                    borderRadius: 8,
-                                    padding: 12,
-                                    textAlign: "left",
-                                }}
-                            >
-                                <h3 style={{ margin: "0 0 8px 0" }}>{entry.title}</h3>
+                            <div key={entry.id} className="card">
+                                <h3>{entry.title}</h3>
                                 <p><strong>Type:</strong> {entry.entry_type}</p>
                                 {entry.notes && <p><strong>Notes:</strong> {entry.notes}</p>}
 
-                                <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+                                <div className="actions-row">
                                     <button
                                         onClick={() => handleCompletePlannerEntry(entry.id)}
-                                        style={{ padding: "6px 10px" }}
+                                        className="btn btn-small"
                                     >
                                         Mark Complete
                                     </button>
 
                                     <button
                                         onClick={() => navigate("/planner")}
-                                        style={{ padding: "6px 10px" }}
+                                        className="btn btn-small btn-secondary"
                                     >
                                         Open Planner
                                     </button>
