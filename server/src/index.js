@@ -24,6 +24,10 @@ app.use("/profile", profileRoutes);
 app.use("/log", logRoutes);
 app.use("/settings", settingsRoutes);
 
+app.get("/", (req, res) => {
+    res.send("DailyThrive API is running");
+});
+
 app.get("/health", (req, res) => {
     res.json({ ok: true, app: "DailyThrive", message: "API is running" });
 });
