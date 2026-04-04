@@ -18,7 +18,7 @@ function getAvatarEmoji(avatarId) {
 }
 
 export default function Profile() {
-  const { updateUser } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const [profile, setProfile] = useState(null);
   const [message, setMessage] = useState("");
@@ -41,10 +41,13 @@ useEffect(() => {
     try {
       setMessage("");
       setError("");
-      const data = await updateAvatar(avatarId);
-      setProfile(data.profile);
-      updateUser(data.profile);
-      setMessage("Avatar updated successfully");
+        const data = await updateAvatar(avatarId);
+        setProfile(data.profile);
+        updateUser({
+            ...(user || {}),
+            ...data.profile,
+        });
+        setMessage("Avatar updated successfully");
     } catch (err) {
       setError(err.message);
     }
@@ -54,10 +57,13 @@ useEffect(() => {
     try {
       setMessage("");
       setError("");
-      const data = await updateTitle(title);
-      setProfile(data.profile);
-      updateUser(data.profile);
-      setMessage("Title updated successfully");
+        const data = await updateTitle(title);
+        setProfile(data.profile);
+        updateUser({
+            ...(user || {}),
+            ...data.profile,
+        });
+        setMessage("Title updated successfully");
     } catch (err) {
       setError(err.message);
     }

@@ -45,8 +45,15 @@ export function AuthProvider({ children }) {
     }
     
     function updateUser(updatedUser) {
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-         setUser(updatedUser);
+        setUser((currentUser) => {
+            const mergedUser = {
+                ...(currentUser || {}),
+                ...updatedUser,
+            };
+
+            localStorage.setItem("user", JSON.stringify(mergedUser));
+            return mergedUser;
+        });
     }
 
     return (
