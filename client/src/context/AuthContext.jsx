@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { getProfile } from "../services/profileService";
 
 const AuthContext = createContext();
 
@@ -13,8 +14,24 @@ export function AuthProvider({ children }) {
             const savedUser = localStorage.getItem("user");
 
             if (savedToken && savedUser) {
+                const parsedUser = JSON.parse(savedUser);
                 setToken(savedToken);
-                setUser(JSON.parse(savedUser));
+                setUser(parsedUser);
+
+                getProfile(savedToken)
+                    .then((profileData) => {
+                        const fullUser = {
+                            ...parsedUser,
+                            ...profileData.profile,
+                            token: savedToken,
+                        };
+
+                        localStorage.setItem("user", JSON.stringify(fullUser));
+                        setUser(fullUser);
+                    })
+                    .catch((err) => {
+                        console.error("Failed to refresh profile on load", err);
+                    });
             }
         } catch (error) {
             console.error("Failed to restore auth state:", error);
@@ -30,11 +47,28 @@ export function AuthProvider({ children }) {
         document.documentElement.setAttribute("data-theme", theme);
     }, [user]);
 
-    function login(authToken, authUser) {
+    async function login(authToken, authUser) {
         localStorage.setItem("token", authToken);
-        localStorage.setItem("user", JSON.stringify(authUser));
-        setToken(authToken);
-        setUser(authUser);
+
+        try {
+            const profileData = await getProfile(authToken);
+
+            const fullUser = {
+                ...authUser,
+                ...profileData.profile,
+                token: authToken,
+            };
+
+            localStorage.setItem("user", JSON.stringify(fullUser));
+            setToken(authToken);
+            setUser(fullUser);
+        } catch (error) {
+            console.error("Failed to fetch profile after login", error);
+
+            localStorage.setItem("user", JSON.stringify(authUser));
+            setToken(authToken);
+            setUser(authUser);
+        }
     }
 
     function logout() {

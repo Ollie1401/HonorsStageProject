@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getPlannerEntries, completePlannerEntry } from "../services/plannerService";
 import { getGoals } from "../services/goalsService";
+import { useLocation } from "react-router-dom";
 
 function normalizeEntryDate(entryDate) {
     if (!entryDate) return "";
@@ -34,6 +35,7 @@ export default function Home() {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
+    const location = useLocation();
 
     async function loadHomeData() {
         if (!isAuthenticated) {
@@ -61,7 +63,7 @@ export default function Home() {
 
     useEffect(() => {
         loadHomeData();
-    }, [isAuthenticated]);
+    }, [isAuthenticated, location]);
 
     const todaysEntries = useMemo(() => {
         return plannerEntries.filter(
@@ -137,7 +139,7 @@ export default function Home() {
                         {getGreeting()}, {user?.username || "User"}
                     </h2>
                     <p>
-                        <strong>Title:</strong> {user?.selected_title || "New Member"}
+                        <p><strong>Title:</strong> {user?.selected_title || user?.title || "New Member"}</p>
                     </p>
                     <p>
                         <strong>Total Points:</strong> {user?.points || 0}
