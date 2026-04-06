@@ -170,15 +170,46 @@ strong {
     width: min(1180px, calc(100% - 32px));
     margin: 16px auto 0;
     padding: 14px 18px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     background: var(--surface);
     backdrop-filter: blur(16px);
     box-shadow: var(--shadow-sm);
+}
+
+.nav-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-brand {
+    font-weight: 800;
+    font-size: 1.05rem;
+}
+
+.nav-toggle {
+    display: none;
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+
+.nav-links-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .nav-link {
@@ -200,8 +231,11 @@ strong {
         font-weight: 700;
     }
 
-.nav-spacer {
+.nav-account {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .nav-user {
@@ -219,7 +253,6 @@ strong {
     font-size: 0.82rem;
     color: var(--text-faint);
 }
-
 /* ---------- cards ---------- */
 
 .card {
@@ -439,10 +472,16 @@ textarea {
     flex-wrap: wrap;
 }
 
+.calendar-scroll {
+    width: 100%;
+    overflow-x: auto;
+}
+
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-columns: repeat(7, minmax(90px, 1fr));
     gap: 8px;
+    min-width: 700px;
 }
 
 .calendar-day-header {
@@ -486,16 +525,68 @@ textarea {
 
 /* ---------- responsive ---------- */
 
+@media (max-width: 900px) {
+    .app-shell,
+    .navbar {
+        width: min(100% - 20px, 1180px);
+    }
+
+    .page-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-card,
+    .auth-wrap,
+    .inline-field {
+        max-width: 100%;
+    }
+}
+
 @media (max-width: 700px) {
     .app-shell {
-        width: min(100% - 20px, 1180px);
-        padding-top: 18px;
+        padding-top: 16px;
+        padding-bottom: 28px;
     }
 
     .navbar {
-        width: min(100% - 20px, 1180px);
         top: 8px;
-        padding: 12px 14px;
+        padding: 12px;
+    }
+
+    .nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-links-wrap {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+        .nav-links-wrap.open {
+            display: flex;
+        }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .nav-link {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+
+    .nav-account {
+        margin-left: 0;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .nav-user {
@@ -503,16 +594,55 @@ textarea {
         text-align: left;
     }
 
-    .nav-spacer {
-        margin-left: 0;
+    .card {
+        padding: 14px;
     }
 
-    .calendar-grid {
-        gap: 6px;
+    .actions-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn,
+    .btn-small {
+        width: 100%;
     }
 
     .calendar-cell {
-        min-height: 88px;
+        min-height: 82px;
         padding: 8px;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-shell,
+    .navbar {
+        width: calc(100% - 16px);
+    }
+
+    .hero-card {
+        padding: 18px;
+    }
+
+    .emoji-xl {
+        font-size: 2.4rem;
+    }
+
+    .emoji-lg {
+        font-size: 1.7rem;
+    }
+
+    input,
+    select,
+    textarea {
+        padding: 11px 12px;
     }
 }

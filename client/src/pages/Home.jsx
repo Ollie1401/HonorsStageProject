@@ -139,7 +139,7 @@ export default function Home() {
                         {getGreeting()}, {user?.username || "User"}
                     </h2>
                     <p>
-                        <p><strong>Title:</strong> {user?.selected_title || user?.title || "New Member"}</p>
+                        <strong>Title:</strong> {user?.selected_title || user?.title || "New Member"}
                     </p>
                     <p>
                         <strong>Total Points:</strong> {user?.points || 0}

@@ -169,7 +169,8 @@ export default function Planner() {
                 </button>
             </div>
 
-            <div className="calendar-grid">
+            <div className="calendar-scroll">
+                <div className="calendar-grid">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName) => (
                     <div key={dayName} className="calendar-day-header">
                         {dayName}
@@ -213,6 +214,7 @@ export default function Planner() {
                         </button>
                     );
                 })}
+                </div>
             </div>
 
             {showEntryForm && selectedDate && (
