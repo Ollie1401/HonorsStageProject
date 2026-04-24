@@ -11,6 +11,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Rewards from "./pages/Rewards";
+import Tutorial from "./pages/Tutorial";
 
 export default function App() {
     return (
@@ -66,6 +67,15 @@ export default function App() {
                                  <Rewards />
                              </ProtectedRoute>
                          }
+                    />
+
+                    <Route
+                        path="/tutorial"
+                        element={
+                            <ProtectedRoute>
+                                <Tutorial />
+                            </ProtectedRoute>
+                        }
                     />
 
 

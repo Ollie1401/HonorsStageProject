@@ -220,6 +220,20 @@ export default function Settings() {
                 </div>
             </div>
 
+            <div className="card card-soft stack">
+                <h2>Help</h2>
+                <p>
+                    View a quick guide explaining what each section of DailyThrive does and
+                    how to get started.
+                </p>
+
+                <div className="actions-row">
+                    <button className="btn btn-secondary" onClick={() => navigate("/tutorial")}>
+                        View Tutorial
+                    </button>
+                </div>
+            </div>
+
             <div className="card stack">
                 <h2>Security</h2>
 

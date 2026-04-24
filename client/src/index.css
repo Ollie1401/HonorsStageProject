@@ -295,6 +295,20 @@ strong {
     opacity: 0.5;
 }
 
+.tutorial-card {
+    min-height: 220px;
+}
+
+.tutorial-steps {
+    margin: 0;
+    padding-left: 22px;
+    color: var(--text-soft);
+}
+
+    .tutorial-steps li {
+        margin-bottom: 8px;
+    }
+
 /* ---------- headings / text ---------- */
 
 .page-title {

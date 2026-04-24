@@ -52,6 +52,9 @@ export default function NavBar() {
                             <NavLink to="/rewards" className={linkClass} onClick={closeMenu}>
                                 Rewards
                             </NavLink>
+                            <NavLink to="/tutorial" className={linkClass} onClick={closeMenu}>
+                                Help
+                            </NavLink>
                             <NavLink to="/settings" className={linkClass} onClick={closeMenu}>
                                 Settings
                             </NavLink>
