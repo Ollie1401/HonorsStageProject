@@ -43,8 +43,9 @@ export function AuthProvider({ children }) {
     }, []);
 
     useEffect(() => {
-        const theme = user?.theme_preference || "light";
-        document.documentElement.setAttribute("data-theme", theme);
+        if (!user?.theme_preference) return;
+
+        document.documentElement.setAttribute("data-theme", user.theme_preference);
     }, [user]);
 
     async function login(authToken, authUser) {
