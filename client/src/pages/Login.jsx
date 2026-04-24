@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,7 +22,8 @@ export default function Login() {
         try {
             const data = await loginUser(email, password);
 
-            login(data.token, data.user);
+            await login(data.token, data.user);
+            navigate("/");
 
             setMessage(`Logged in as ${data.user.email}`);
             setEmail("");
