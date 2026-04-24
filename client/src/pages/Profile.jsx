@@ -103,8 +103,7 @@ useEffect(() => {
             const isSelected = profile.selected_avatar === avatar.id;
 
             return (
-                <div className={`card option-card ${isSelected ? "selected" : ""} ${!isUnlocked ? "locked" : ""}`}>
-                <div className="emoji-lg">{avatar.emoji}</div>
+                <div key={avatar.id} className={`card option-card ${isSelected ? "selected" : ""} ${!isUnlocked ? "locked" : ""}`}>                <div className="emoji-lg">{avatar.emoji}</div>
                     <p className="page-subtitle">
                   <strong>{avatar.label}</strong>
                 </p>
@@ -133,7 +132,7 @@ useEffect(() => {
             const isSelected = profile.selected_title === title;
 
             return (
-                <div className={`card option-card ${isSelected ? "selected" : ""}`}>
+                <div key={title} className={`card option-card ${isSelected ? "selected" : ""}`}>
                     <p className="page-subtitle">
                   <strong>{title}</strong>
                 </p>

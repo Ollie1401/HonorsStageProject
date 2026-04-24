@@ -28,7 +28,15 @@ export default function Home() {
     const navigate = useNavigate();
     const { user, isAuthenticated } = useAuth();
 
-    const today = new Date().toISOString().split("T")[0];
+    function getTodayLocalDate() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    }
+
+    const today = getTodayLocalDate();
 
     const [plannerEntries, setPlannerEntries] = useState([]);
     const [goals, setGoals] = useState([]);
