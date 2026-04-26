@@ -7,6 +7,7 @@ export default function Register() {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -43,12 +44,20 @@ export default function Register() {
                 <label className="form-label">
                     Password
                     <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                         required
-                        minLength={8}
                     />
+
+                    <label className="checkbox-row">
+                        <input
+                            type="checkbox"
+                            checked={showPassword}
+                            onChange={() => setShowPassword((current) => !current)}
+                        />
+                        Show password
+                    </label>
                 </label>
 
                 <button type="submit" disabled={loading} className="btn btn-full">

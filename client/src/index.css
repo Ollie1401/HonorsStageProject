@@ -161,6 +161,19 @@ strong {
     gap: 6px;
 }
 
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: -4px;
+    font-size: 0.95rem;
+    color: var(--text-soft);
+}
+
+    .checkbox-row input {
+        width: auto;
+    }
+
 /* ---------- nav ---------- */
 
 .navbar {
