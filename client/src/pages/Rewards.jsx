@@ -24,17 +24,15 @@ export default function Rewards() {
         loadRewards();
     }, []);
 
-    if (loading) {
-        return <p>Loading rewards...</p>;
-    }
+    const totalPoints = rewardsData?.totalPoints || 0;
+    const unlockedRewards = rewardsData?.unlockedRewards || [];
+    const nextReward = rewardsData?.nextReward || null;
+    const pointsUntilNextReward = rewardsData?.pointsUntilNextReward || 0;
+    const rewardMilestones = rewardsData?.rewardMilestones || [];
 
-    if (error) {
-        return <p className="message message-error">{error}</p>;
-    }
-
-    if (!rewardsData) {
-        return <p>No rewards data available.</p>;
-    }
+    const lockedRewards = rewardMilestones.filter(
+        (reward) => totalPoints < reward.milestone
+    );
 
     function getRewardProgressPercent() {
         if (!nextReward) return 100;
@@ -52,26 +50,17 @@ export default function Rewards() {
         );
     }
 
-    const {
-        totalPoints,
-        unlockedRewards,
-        nextReward,
-        pointsUntilNextReward,
-        rewardMilestones,
-    } = rewardsData;
-
-    const lockedRewards = rewardMilestones.filter(
-        (reward) => totalPoints < reward.milestone
-    );
-
     const rewardProgressPercent = getRewardProgressPercent();
 
     useEffect(() => {
-        const storageKey = "seenUnlockedRewardMilestones";
+        if (!rewardsData) return;
 
+        const storageKey = "seenUnlockedRewardMilestones";
         const savedSeenRewards = localStorage.getItem(storageKey);
 
-        const unlockedMilestones = unlockedRewards.map((reward) => reward.milestone);
+        const unlockedMilestones = unlockedRewards.map(
+            (reward) => reward.milestone
+        );
 
         if (!savedSeenRewards) {
             localStorage.setItem(storageKey, JSON.stringify(unlockedMilestones));
@@ -90,7 +79,19 @@ export default function Rewards() {
             setCelebrationReward(newestReward);
             localStorage.setItem(storageKey, JSON.stringify(unlockedMilestones));
         }
-    }, [unlockedRewards]);
+    }, [rewardsData, unlockedRewards]);
+
+    if (loading) {
+        return <p>Loading rewards...</p>;
+    }
+
+    if (error) {
+        return <p className="message message-error">{error}</p>;
+    }
+
+    if (!rewardsData) {
+        return <p>No rewards data available.</p>;
+    }
 
     return (
         <div className="page">
@@ -164,7 +165,7 @@ export default function Rewards() {
             {unlockedRewards.length === 0 ? (
                 <p>No rewards unlocked yet.</p>
             ) : (
-                    <div className="stack section-block">
+                <div className="stack section-block">
                     {unlockedRewards.map((reward) => (
                         <div key={reward.milestone} className="card card-success reward-card reward-unlocked">
                             <div className="reward-card-title">
@@ -184,7 +185,7 @@ export default function Rewards() {
             {lockedRewards.length === 0 ? (
                 <p>No upcoming rewards.</p>
             ) : (
-                    <div className="stack">
+                <div className="stack">
                     {lockedRewards.map((reward) => (
                         <div key={reward.milestone} className="card card-muted reward-card reward-locked">
                             <div className="reward-card-title">
