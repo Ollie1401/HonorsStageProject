@@ -170,16 +170,17 @@ export default function Planner() {
             </div>
 
             <div className="calendar-scroll">
-                <div className="calendar-grid">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName) => (
-                    <div key={dayName} className="calendar-day-header">
-                        {dayName}
-                    </div>
-                ))}
+                <div className="calendar-wrapper">
+                    <div className="calendar-grid">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName) => (
+                        <div key={dayName} className="calendar-day-header">
+                            {dayName}
+                        </div>
+                     ))}
 
-                {calendarDays.map((date, index) => {
-                    if (!date) {
-                        return <div key={`empty-${index}`} />;
+                    {calendarDays.map((date, index) => {
+                        if (!date) {
+                            return <div key={`empty-${index}`} className="calendar-cell calendar-empty" />;
                     }
 
                     const formattedDate = formatDateToYYYYMMDD(date);
@@ -212,68 +213,85 @@ export default function Planner() {
                                 </div>
                             )}
                         </button>
-                    );
-                })}
+                         );
+                        })}
+                    </div>
                 </div>
             </div>
 
             {showEntryForm && selectedDate && (
-                <div className="card card-soft form-card">
-                    <h2>Add Entry for {selectedDate}</h2>
+                <div
+                    className="modal-overlay"
+                    onClick={() => setShowEntryForm(false)}
+                >
+                    <div
+                        className="modal-card"
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        <button
+                            className="modal-close"
+                            onClick={() => setShowEntryForm(false)}
+                            type="button"
+                        >
+                            ✕
+                        </button>
 
-                    <form onSubmit={handleSubmit} className="form-stack">
-                        <label className="form-label">
-                            Title
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(event) => setTitle(event.target.value)}
-                                required
-                            />
-                        </label>
+                        <h2>Add Entry for {selectedDate}</h2>
 
-                        <label className="form-label">
-                            Type
-                            <select
-                                value={entryType}
-                                onChange={(event) => setEntryType(event.target.value)}
-                            >
-                                <option value="workout">Workout</option>
-                                <option value="appointment">Appointment</option>
-                                <option value="meal">Meal</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </label>
+                        <form onSubmit={handleSubmit} className="form-stack">
+                            <label className="form-label">
+                                Title
+                                <input
+                                    type="text"
+                                    value={title}
+                                    onChange={(event) => setTitle(event.target.value)}
+                                    required
+                                />
+                            </label>
 
-                        <label className="form-label">
-                            Notes
-                            <textarea
-                                value={notes}
-                                onChange={(event) => setNotes(event.target.value)}
-                                rows="4"
-                            />
-                        </label>
+                            <label className="form-label">
+                                Type
+                                <select
+                                    value={entryType}
+                                    onChange={(event) => setEntryType(event.target.value)}
+                                >
+                                    <option value="workout">Workout</option>
+                                    <option value="appointment">Appointment</option>
+                                    <option value="meal">Meal</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </label>
 
-                        <div className="actions-row">
-                            <button type="submit" disabled={loading} className="btn">
-                                {loading ? "Saving..." : "Add Entry to Selected Date"}
-                            </button>
+                            <label className="form-label">
+                                Notes
+                                <textarea
+                                    value={notes}
+                                    onChange={(event) => setNotes(event.target.value)}
+                                    rows="4"
+                                />
+                            </label>
 
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setShowEntryForm(false);
-                                    setSelectedDate("");
-                                    setTitle("");
-                                    setEntryType("workout");
-                                    setNotes("");
-                                }}
-                                className="btn btn-secondary"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
+                            <div className="actions-row">
+                                <button type="submit" disabled={loading} className="btn">
+                                    {loading ? "Saving..." : "Add Entry"}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowEntryForm(false);
+                                        setSelectedDate("");
+                                        setTitle("");
+                                        setEntryType("workout");
+                                        setNotes("");
+                                    }}
+                                    className="btn btn-secondary"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
 
