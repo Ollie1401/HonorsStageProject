@@ -5,6 +5,7 @@ export default function Rewards() {
     const [rewardsData, setRewardsData] = useState(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
+    const [celebrationReward, setCelebrationReward] = useState(null);
 
     async function loadRewards() {
         try {
@@ -65,8 +66,59 @@ export default function Rewards() {
 
     const rewardProgressPercent = getRewardProgressPercent();
 
+    useEffect(() => {
+        const storageKey = "seenUnlockedRewardMilestones";
+
+        const savedSeenRewards = localStorage.getItem(storageKey);
+
+        const unlockedMilestones = unlockedRewards.map((reward) => reward.milestone);
+
+        if (!savedSeenRewards) {
+            localStorage.setItem(storageKey, JSON.stringify(unlockedMilestones));
+            return;
+        }
+
+        const seenMilestones = JSON.parse(savedSeenRewards);
+
+        const newlyUnlockedRewards = unlockedRewards.filter(
+            (reward) => !seenMilestones.includes(reward.milestone)
+        );
+
+        if (newlyUnlockedRewards.length > 0) {
+            const newestReward = newlyUnlockedRewards[newlyUnlockedRewards.length - 1];
+
+            setCelebrationReward(newestReward);
+            localStorage.setItem(storageKey, JSON.stringify(unlockedMilestones));
+        }
+    }, [unlockedRewards]);
+
     return (
         <div className="page">
+            {celebrationReward && (
+                <div className="celebration-overlay">
+                    <div className="card celebration-modal">
+                        <div className="celebration-confetti">🎉 ✨ 🏆 ✨ 🎉</div>
+
+                        <h2>Reward Unlocked!</h2>
+
+                        <p>
+                            You unlocked <strong>{celebrationReward.name}</strong>.
+                        </p>
+
+                        <p className="small-text">
+                            Milestone reached: {celebrationReward.milestone} points
+                        </p>
+
+                        <button
+                            className="btn"
+                            onClick={() => setCelebrationReward(null)}
+                        >
+                            Amazing
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <h1>Rewards</h1>
 
             <div className="card card-soft form-card reward-progress-card">
