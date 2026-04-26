@@ -15,7 +15,7 @@ export default function Tutorial() {
                         Start Using App
                     </Link>
                     <Link to="/settings" className="btn btn-secondary">
-                        Back to Settings
+                        Go to Settings
                     </Link>
                 </div>
             </section>
