@@ -31,14 +31,14 @@ This version uses a hosted database. No additional setup is required.
 1. Open two terminals
 
 2. Start the backend:
-   cd server
-   npm install
-   npm run dev
+	1. cd server
+	2. npm install
+	3. npm run dev
 
 3. Start the frontend:
-   cd client
-   npm install
-   npm run dev
+	1. cd client
+	2. npm install
+	3. npm run dev
 
 4. Open in browser:
    http://localhost:5173
@@ -59,13 +59,13 @@ If you wish to run the system fully locally:
    DATABASE_URL=postgresql://postgres:YOUR_PASSWORD_HERE@localhost:5432/dailythrive
 
 5. Start the application:
-   cd server
-   npm install
-   npm run dev
-
-   cd client
-   npm install
-   npm run dev
+	1. cd server
+	2. npm install
+	3. npm run dev
+	 
+	4. cd client
+	5. npm install
+	6. npm run dev
 
 ## Notes
 - The application defaults to a hosted database for ease of use.
